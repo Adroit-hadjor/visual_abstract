@@ -70,7 +70,7 @@ class LoginTest(TestCase):
             HTTP_X_REQUESTED_WITH='XMLHttpRequest'
         )
         self.assertEqual(response.status_code, 200)
-        self.assertIn(b'Logged in successfully.', response.content)
+        self.assertIn(b'Hello, testuser! You are now logged in.', response.content)
 
     def test_login_invalid_credentials(self):
         """Test login fails with invalid credentials."""
