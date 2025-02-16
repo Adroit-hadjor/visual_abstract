@@ -1,0 +1,91 @@
+   <div id="project-list-container">
+        {% for project in projects %}
+          <div
+           class="project-row"
+            hx-get="{% url 'project_detail_comments' project.id %}"
+            hx-trigger="click"
+            hx-target="body"
+            hx-swap="none"
+          >
+            <div>{{ project.name }}</div>
+            <div>{{ project.description }}</div>
+               <button onclick="event.stopPropagation()"
+      hx-post="{% url 'project_delete' project.id %}"
+      hx-confirm="Are you sure?"
+      hx-target="#project-list-container"
+      hx-swap="innerHTML"
+      hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'
+       style="z-index: 100000"
+    >
+      Delete
+    </button>
+          </div>
+        {% endfor %}
+      </div>
+
+
+<!--
+<div style="display: flex; gap: 2rem;">
+
+  <div style="flex: 1;">
+    <h2>Projects</h2>
+    <div  id="project-list-container">
+      <table>
+        <tr>
+          <th>Name</th>
+          <th>Description</th>
+          <th>Actions</th>
+        </tr>
+        {% for project in projects %}
+          <tr>
+            <td>{{ project.name }}</td>
+            <td>{{ project.description }}</td>
+            <td>
+
+              <button
+                hx-get="{% url 'project_update' project.id %}"
+                hx-target="#detail-container"
+                hx-swap="innerHTML"
+              >
+                Edit
+              </button>
+
+
+              <form
+                hx-post="{% url 'project_delete' project.id %}"
+                hx-confirm="Are you sure?"
+                hx-target="#project-list-container"
+                hx-swap="innerHTML"
+                method="POST"
+                style="display: inline;"
+              >
+                {% csrf_token %}
+                <button type="submit">Delete</button>
+              </form>
+
+
+              <button
+                hx-get="{% url 'project_comments_partial' project.id %}"
+                hx-target="#comments-container"
+                hx-swap="innerHTML"
+              >
+                View Comments
+              </button>
+            </td>
+          </tr>
+        {% endfor %}
+      </table>
+    </div>
+  </div>
+
+  <div style="flex: 1;">
+    <h2>Details / Edit</h2>
+    <div id="detail-container" style="border: 1px solid #ccc; min-height: 200px; padding: 1rem;">
+    </div>
+
+    <h2>Comments</h2>
+    <div id="comments-container" style="border: 1px solid #ccc; min-height: 200px; padding: 1rem;">
+    </div>
+  </div>
+</div>
+-->

@@ -1,0 +1,86 @@
+
+    <div id="details-section" style="flex: 1;">
+<!-- templates/projects/partials/_detail_comments_oob.html -->
+
+<!-- Out-of-band swap for details -->
+<div hx-swap-oob="true" id="details-container" style="margin-top:80px">
+  <h2> Project name : {{ project.name }} </h2>
+  <div style="color: grey"> Created By: {{ project.owner.username }}</div>
+  <p style="margin:30px 0px;font-size:14px">{{ project.description }}</p>
+
+  <!-- The Edit button loads the edit form into #details-container -->
+  <button
+    hx-get="{% url 'project_update' project.id %}"
+    hx-target="#details-container"
+    hx-swap="innerHTML"
+  >
+    Edit Project
+  </button>
+  <!-- ADD MEMBER button: opens the "addMemberModal" and fetches the form -->
+  <button
+    id="openAddMemberModalBtn"
+    data-project-id="{{ project.id }}"
+  >
+    Add Member
+  </button>
+  <div style="margin-top: 50px"></div>
+
+   <script>
+    const addBtn = document.getElementById('openAddMemberModalBtn');
+    addBtn.addEventListener('click', () => {
+      const projectId = addBtn.getAttribute('data-project-id');
+      // Show the modal
+      addMemberModal.style.display = 'block';
+      // Fetch the partial
+      htmx.ajax('GET', `/projects/${projectId}/add_member/`, addMemberModalContent);
+    });
+  </script>
+
+</div>
+
+<!-- Out-of-band swap for comments -->
+<div hx-swap-oob="true" id="comments-container" >
+  <form
+    class="comment-editor"
+    method="POST"
+    hx-post="{% url 'project_comment_add' project.id %}"
+    hx-target="#comments-container"
+    hx-swap="innerHTML"
+  >
+    {% csrf_token %}
+    <div class="comment-editor-body">
+      <textarea
+        name="text"
+        rows="3"
+        placeholder="Type here"
+        class="comment-textarea"
+        style="width: 100%"
+      ></textarea>
+
+
+    </div>
+    <div class="comment-editor-actions">
+      <button style="background-image: linear-gradient(to top, #1e3c72 0%, #1e3c72 1%, #2a5298 100%);color:white;padding: 5px;border-radius: 5px;margin-bottom: 30px" type="submit" class="btn-comment">Comment</button>
+    </div>
+  </form>
+  <h4 style="margin-bottom: 20px">Comments</h4>
+  <ul style="height:200px;overflow-y:scroll ;border:0px solid red;">
+    {% for c in comments %}
+      <li >
+        <div style="display: flex;flex-direction:column;border-radius: 10px;background-color: white;width: 150px;min-height: 40px;margin-bottom: 10px;padding:5px">
+            {{ c.text }}
+        <span style="font-size: 10px;color:grey;">{{ c.user.username }} on {{ c.created_at }}</span>
+        </div>
+
+
+      </li>
+    {% empty %}
+      <li>No comments yet.</li>
+    {% endfor %}
+  </ul>
+
+  <!-- Add Comment Form -->
+
+</div>
+
+    </div>

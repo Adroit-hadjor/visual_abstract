@@ -1,0 +1,29 @@
+<!-- templates/projects/partials/_comment_list.html -->
+
+{% if error %}
+  <p style="color:red;">{{ error }}</p>
+{% endif %}
+
+<h3>Comments for {{ project.name }}</h3>
+<ul>
+  {% for c in comments %}
+    <li>
+      <strong>{{ c.user.username }}</strong> <em>({{ c.created_at }})</em><br>
+      {{ c.text }}
+    </li>
+  {% empty %}
+    <li>No comments yet.</li>
+  {% endfor %}
+</ul>
+
+<form
+  method="POST"
+  hx-post="{% url 'project_comment_add' project.id %}"
+  hx-target="#comments-container"
+  hx-swap="innerHTML"
+>
+  {% csrf_token %}
+  <textarea name="text" rows="3" placeholder="Add a comment..."></textarea>
+  <br><br>
+  <button type="submit">Add Comment</button>
+</form>

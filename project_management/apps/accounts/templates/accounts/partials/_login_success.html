@@ -1,0 +1,13 @@
+<div>
+  <h3>Hello, {{ username }}! You are now logged in.</h3>
+  <p>You are now logged in. <a href="{% url 'home' %}">Go to the homepage</a></p>
+  <form
+    action="{% url 'logout_htmx' %}" method="POST"
+    hx-post="{% url 'logout_htmx' %}"
+    hx-target="#login-form-container"
+    hx-swap="innerHTML"
+  >
+    {% csrf_token %}
+    <button type="submit">Logout</button>
+  </form>
+</div>

@@ -1,0 +1,33 @@
+<form
+  method="POST"
+  action="{% url 'signup_htmx' %}"
+  hx-post="{% url 'signup_htmx' %}"
+  hx-target="#signup-form-container"
+  hx-swap="innerHTML"
+  style="border:0px solid red;height: 230px;display: flex;justify-content: space-evenly;flex-direction: column"
+>
+  {% csrf_token %}
+
+  {% if error %}
+    <div class="error" style="color: red;">
+      {{ error }}
+    </div>
+  {% endif %}
+
+  <div>
+
+    <input placeholder="username" type="text" name="username" value="{{ username|default_if_none:'' }}">
+  </div>
+  <div>
+
+    <input placeholder="Email (optional)" type="email" name="email" value="{{ email|default_if_none:'' }}">
+  </div>
+  <div>
+    <input placeholder="Password" type="password" name="password">
+  </div>
+  <div>
+    <input placeholder="Confirm Password" type="password" name="password_confirm">
+  </div>
+
+  <button style="width: 205px;margin-top:5px" type="submit">Sign Up</button>
+</form>

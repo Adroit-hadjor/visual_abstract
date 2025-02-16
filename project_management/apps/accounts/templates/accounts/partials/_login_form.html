@@ -1,0 +1,23 @@
+<form
+  method="POST"
+  action="{% url 'login_htmx' %}"
+  hx-post="{% url 'login_htmx' %}"
+  hx-target="#login-form-container"
+  hx-swap="innerHTML"
+  style="border:0px solid red;height: 200px; display: flex;align-items: center;flex-direction: column;justify-content: space-evenly"
+>
+  {% csrf_token %}
+  {% if error %}
+    <div class="error" style="color: red;">{{ error }}</div>
+  {% endif %}
+
+  <div>
+
+    <input placeholder="username" type="text" name="username">
+  </div>
+  <div>
+    <input placeholder="password" type="password" name="password">
+  </div>
+
+  <button style="width:200px;outline: none;border:0px solid red;" type="submit">Login</button>
+</form>

@@ -1,0 +1,28 @@
+<!-- templates/projects/partials/_project_update_form.html -->
+
+<form
+  method="POST"
+  hx-post="{% url 'project_update' project.id %}"
+  hx-target="#details-container"
+  hx-swap="innerHTML"
+  style="border: 1px solid #ccc; padding: 1rem;"
+>
+  {% csrf_token %}
+  <label for="id_name_{{ project.id }}">Project Name</label><br>
+  <input type="text" id="id_name_{{ project.id }}" name="name" value="{{ project.name }}"><br><br>
+
+  <label for="id_description_{{ project.id }}">Description</label><br>
+  <textarea id="id_description_{{ project.id }}" name="description">{{ project.description }}</textarea><br><br>
+
+  <button type="submit">Save</button>
+
+  <!-- Optional Cancel (just re-load the project list or clear the detail container) -->
+  <button
+    type="button"
+    hx-get="{% url 'project_detail_comments' project.id %}"
+    hx-target="#details-container"
+    hx-swap="innerHTML"
+  >
+    Cancel
+  </button>
+</form>

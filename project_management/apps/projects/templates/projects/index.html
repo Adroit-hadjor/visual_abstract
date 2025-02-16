@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Projects</title>
+
+  <!-- HTMX for AJAX calls -->
+  <script src="https://unpkg.com/htmx.org@1.9.2"></script>
+  {% load static %}
+  <link href="{% static 'css/styles.css' %}" rel="stylesheet">
+</head>
+<body>
+  <div class="outer-container">
+
+    <!-- LEFT COLUMN: Projects -->
+    <div style="flex: 1;">
+      <!-- CREATE PROJECT BUTTON + MODAL -->
+      <button id="openCreateModalBtn" style="margin-bottom: 20px;">Create New Project</button>
+      {% if messages %}
+      <div style="margin-bottom: 50px" class="messages">
+        {% for message in messages %}
+    <div {% if message.tags %} class="{{ message.tags }}"{% endif %} >{{ message }}</div>
+    {% endfor %}
+      </div>
+      {% endif %}
+      <div id="createModal" class="modal">
+        <div class="modal-content">
+          <span class="close-btn" id="closeCreateModalBtn">&times;</span>
+          <!-- Create Project Form -->
+          <form
+            method="POST"
+            hx-post="{% url 'project_create' %}"
+            hx-target="#project-list-container"
+            hx-swap="innerHTML"
+            style="border: 1px solid #ccc; padding: 1rem;"
+          >
+            {% csrf_token %}
+              <label for="id_name">Project Name</label><br>
+      <input type="text" id="id_name" name="name"><br><br>
+
+      <label for="id_description">Description</label><br>
+      <textarea id="id_description" name="description"></textarea><br><br>
+            <!-- name + description fields -->
+
+            <button type="submit">Create Project</button>
+          </form>
+        </div>
+      </div>
+      <!-- END CREATE PROJECT MODAL -->
+
+      <!-- PROJECT LIST HEADER -->
+      <div class="project-header">
+        <div>Name</div>
+        <div>Description</div>
+        <div>Actions</div>
+      </div>
+
+      <!-- PROJECT ROWS (HTMX updates here) -->
+      <div  id="project-list-container">
+        {% for project in projects %}
+          <div
+            class="project-row"
+            hx-get="{% url 'project_detail_comments' project.id %}"
+            hx-trigger="click"
+            hx-target="body"
+            hx-swap="none"
+           style="z-index: 100"
+          >
+            <div>{{ project.name }}</div>
+            <p style="text-overflow: ellipsis; height:21px;border:0px solid red;width:340px;margin-right: 30px;overflow: hidden">{{ project.description }}</p>
+             <button onclick="event.stopPropagation()"
+      hx-post="{% url 'project_delete' project.id %}"
+      hx-confirm="Are you sure?"
+      hx-target="#project-list-container"
+      hx-swap="innerHTML"
+      hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'
+       style="z-index: 101"
+    >
+      Delete
+    </button>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+    <!-- END LEFT COLUMN -->
+
+
+    <!-- RIGHT COLUMN: Details + Comments -->
+    <div id="details-section" style="flex: 1;">
+      <h2></h2>
+      <div id="details-container" style="min-height: 150px; border: 0px solid #ccc; padding: 10px;">
+
+      </div>
+
+      <h2></h2>
+      <div id="comments-container" style="min-height: 150px; border: 0px solid #ccc; padding: 10px;">
+
+      </div>
+
+         <a href="{% url 'logout' %}" style="float: right; margin: 10px;">
+  Logout
+</a>
+    </div>
+
+    <!-- END RIGHT COLUMN -->
+  </div>
+  <!-- END outer-container -->
+
+  <!-- ADD MEMBER MODAL -->
+  <div id="addMemberModal" class="modal" style="z-index:20000;">
+    <div class="modal-content" id="addMemberModalContent">
+      <span class="close-btn" id="closeAddMemberModalBtn">&times;</span>
+      <!-- We'll load _add_member_form.html here via HTMX GET. -->
+    </div>
+  </div>
+  <!-- END ADD MEMBER MODAL -->
+
+  <!-- CREATE PROJECT MODAL JS (unchanged) -->
+  <script>
+    /* ========== CREATE PROJECT MODAL ========== */
+    const openCreateModalBtn = document.getElementById('openCreateModalBtn');
+    const closeCreateModalBtn = document.getElementById('closeCreateModalBtn');
+    const createModal         = document.getElementById('createModal');
+
+    openCreateModalBtn.addEventListener('click', () => {
+      createModal.style.display = 'block';
+    });
+    closeCreateModalBtn.addEventListener('click', () => {
+      createModal.style.display = 'none';
+    });
+    window.addEventListener('click', (event) => {
+      if (event.target === createModal) {
+        createModal.style.display = 'none';
+      }
+    });
+    document.body.addEventListener('htmx:afterSwap', (evt) => {
+      if (evt.detail.target.id === 'project-list-container') {
+        createModal.style.display = 'none';
+      }
+    });
+
+    /* ========== ADD MEMBER MODAL ========== */
+    const addMemberModal        = document.getElementById('addMemberModal');
+    const addMemberModalContent = document.getElementById('addMemberModalContent');
+    const closeAddMemberModalBtn= document.getElementById('closeAddMemberModalBtn');
+
+    if (closeAddMemberModalBtn) {
+      closeAddMemberModalBtn.addEventListener('click', () => {
+        addMemberModal.style.display = 'none';
+      });
+    }
+    window.addEventListener('click', (event) => {
+      if (event.target === addMemberModal) {
+        addMemberModal.style.display = 'none';
+      }
+    });
+
+    // Optional: auto-close after membership is updated
+    /*
+    document.body.addEventListener('htmx:afterSwap', (evt) => {
+      if (evt.detail.target.id === 'membership-list-container') {
+        addMemberModal.style.display = 'none';
+      }
+    });
+    */
+  </script>
+</body>
+</html>

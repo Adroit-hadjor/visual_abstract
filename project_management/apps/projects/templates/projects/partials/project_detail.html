@@ -1,0 +1,12 @@
+<h2>{{ project.name }}</h2>
+<p>{{ project.description }}</p>
+
+<!-- Comments section -->
+<div id="comment-list-{{ project.id }}"
+     hx-get="{% url 'project_comments_partial' project.id %}"
+     hx-trigger="load"
+     hx-target="#comment-list-{{ project.id }}"
+     hx-swap="innerHTML"
+>
+  <!-- This automatically loads the comment list partial on page load -->
+</div>

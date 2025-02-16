@@ -1,0 +1,106 @@
+  /* ===== GLOBAL & LAYOUT ===== */
+    * {
+      margin: 0;
+      padding: 0;
+    }
+  input{
+      height: 30px;
+      background-color: rgba(0,0,0,0.05);
+      outline: none;
+      border-radius:10px;
+      width:200px;
+      border:0px solid red;
+      padding: 5px;
+  }
+    button{
+      border:0px solid red;
+        height: 35px;
+      padding: 5px;
+      border-radius:10px;
+
+
+      background-image: linear-gradient(to top, #1e3c72 0%, #1e3c72 1%, #2a5298 100%);color:white;padding: 5px;border-radius: 5px;
+    }
+    body {
+      background-image: linear-gradient(to top, #1e3c72 0%, #1e3c72 1%, #2a5298 100%);
+      height: 100vh;
+      width: 100%;
+      overflow-y: scroll;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    #project-list-container{
+      overflow-y: scroll;
+      border: 0px solid red;
+      height: 70vh;
+    }
+    .outer-container {
+      background-color: #eaf4fc;
+      display: flex;
+      gap: 2rem;
+      height: 80vh;
+      width: 80vw;
+      border-radius: 20px;
+      padding: 20px;
+      flex-direction: row;
+      box-shadow: rgba(149, 157, 165, 0.2) 8px 8px 24px,
+                  rgba(149, 157, 165, 0.15) -4px -4px 12px;
+    }
+
+    /* ===== MODAL STYLES ===== */
+    .modal {
+      display: none; /* hidden by default */
+      position: fixed;
+      z-index: 999;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0,0,0,0.4);
+    }
+    .modal-content {
+      background-color: #fff;
+      margin: 10% auto;
+      padding: 20px;
+      border: 1px solid #888;
+      width: 400px;
+      border-radius: 8px;
+      position: relative;
+    }
+    .close-btn {
+      position: absolute;
+      top: 10px;
+      right: 15px;
+      font-size: 20px;
+      cursor: pointer;
+    }
+    .close-btn:hover {
+      color: #000;
+    }
+
+    /* ===== PROJECT LIST STYLES ===== */
+    .project-header {
+      display: flex;
+      flex-direction: row;
+      margin-bottom: 20px;
+    }
+    .project-header > div {
+      width: 20vw;
+      font-size: medium;
+      color: grey;
+    }
+    .project-row {
+      display: flex;
+      flex-direction: row;
+      margin-bottom: 15px;
+      height: 70px;
+      align-items: center;
+      border-radius: 10px;
+      padding: 0 10px;
+      background-color: #fff;
+      cursor: pointer;
+    }
+    .project-row > div {
+      width: 20vw;
+    }

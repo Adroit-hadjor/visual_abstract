@@ -1,0 +1,32 @@
+<!-- templates/projects/partials/_add_member_form.html -->
+
+<h3>Add Member to {{ project.name }}</h3>
+
+<form
+  method="POST"
+  hx-post="{% url 'project_add_member' project.id %}"
+  hx-target="#addMemberModalContent"
+  hx-swap="innerHTML"
+  style="border: 1px solid #ccc; padding: 1rem;"
+>
+  {% csrf_token %}
+
+  <label for="id_user_select">User:</label><br>
+  <select id="id_user_select" name="user_id">
+    {% for u in all_users %}
+      <option value="{{ u.id }}">{{ u.username }}</option>
+    {% endfor %}
+  </select>
+  <br><br>
+
+  <label for="id_role_select">Role:</label><br>
+  <select id="id_role_select" name="role">
+    <option value="owner">Owner</option>
+    <option value="editor" selected>Editor</option>
+    <option value="reader">Reader</option>
+    <option value="none">None</option>
+  </select>
+  <br><br>
+
+  <button type="submit">Add Member</button>
+</form>
